@@ -1,0 +1,118 @@
+<html>
+	<head>
+		<title>Clicker</title>
+		<style>
+			@import url('https://fonts.cdnfonts.com/css/common-pixel');
+		
+			body{
+				background: rgb(255,255,255);
+				background: linear-gradient(168deg, rgba(2,0,36,1) 0%, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 100%);
+				display: flex;
+				flex-flow: column;
+				height: 100%;
+				margin: 0;
+			}
+			
+			.Click{
+				position: relative;
+			    border:none;
+				cursor: pointer;
+				width: 64px;
+				height: 64px;
+				background: url("Click.png");
+				background-size: 100%;
+			}
+			
+			#Game{
+				width: 100%;
+				flex-grow: 1;
+				overflow: hidden;
+			}
+			
+			#Score{
+				font-family: 'Common Pixel', sans-serif;
+				color : #3E9E81;
+			}
+		
+		</style>
+	</head>
+	<body>
+		<!--Score-->
+		<center>
+		<h1 id="Score">SCORE: 0</h1>
+		</center>
+		<!--EndScore-->
+		<!--StartGame-->
+		<div id="Game">
+		</div>
+		<!--EndGame-->
+		
+		<!--StartJS-->
+		<script type="text/javascript" src="Tween.js"></script>
+		<script type="text/javascript" src="Parallel.js"></script>
+		<script>
+			var gameDiv = document.getElementById("Game");
+			var score = 0;
+			var scoreText = document.getElementById("Score");
+			var interval = 1.75;
+			
+			function getRandomInt(max) {
+				return Math.floor(Math.random() * max);
+			}
+			
+			async function addScore(element){
+				element.remove();
+				score = score + 1;
+				scoreText.innerHTML = "SCORE: " + score.toString();
+			}
+		
+			async function addButton(left,top,inter){
+				var i = document.createElement("button");
+				i.className = "Click";
+				i.style.left = left;
+				i.style.top = top;
+				i.onclick = function() {
+								addScore(i);
+								if(interval > 0.5){
+									interval = interval - 0.01;
+								}
+								return;
+								};
+				gameDiv.appendChild(i);
+				var t = new Tween(i.style, 'width', Tween.regularEaseIn, 64, 1, inter, 'px'); 
+				var t2 = new Tween(i.style, 'height', Tween.regularEaseIn, 64, 1, inter, 'px'); 
+				var p = new Parallel();
+				p.addChild(t);
+				p.addChild(t2);
+				p.start();
+				setTimeout(
+				function() {
+					i.remove();
+				}, ((inter*1000)-50));
+			}
+			
+			var intervalID = window.setInterval(myCallback, 1500);
+
+			function myCallback() {
+				let l = getRandomInt(95);
+				let t = getRandomInt(95);
+				addButton((l.toString()+"%"),(t.toString()+"%"),interval);
+				
+				
+				
+			}
+			
+			/*while (true){
+				let l = getRandomInt(95);
+				let t = getRandomInt(95);
+				setTimeout(
+				function() {
+					addButton((l.toString()+"%"),(t.toString()+"%"));
+				}, 1050);
+			}*/
+			
+			
+		</script>
+		<!--EndJS-->
+	</body
+</html>
